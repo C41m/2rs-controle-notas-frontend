@@ -1,1 +1,34 @@
-/* You can add global styles to this file, and also import other style files */
+// styles.scss
+
+/* SOBRESCREVA AS VARIÁVEIS DEPOIS */
+:root {
+  --surface-ground: #f6f8f6;
+  /* ← fundo da aplicação (mais escuro que branco) */
+  --surface-section: #ffffff;
+  /* ← fundo de seções (ex: sidebar, cards) */
+  --surface-card: #ffffff;
+  /* ← fundo de cards (ex: modais, painéis) */
+  --surface-hover: #f8f9fa;
+  --surface-border: #f0f0f0;
+  /* cinza claro */
+  /* cinza claro */
+  --p-progressspinner-color: #fff;
+
+
+  /* ← hover leve */
+}
+
+* {
+  box-sizing: border-box;
+  font-family: 'Roboto';
+}
+
+html,
+body {
+  height: 100%;
+  font-size: 14px;
+}
+
+body {
+  margin: 0;
+}

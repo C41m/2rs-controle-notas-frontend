@@ -1,0 +1,147 @@
+<!-- src/app/features/user-account/user-account/user-account.component.html -->
+
+<div class="account-page p-3">
+    <!-- Header -->
+    <div class="flex align-items-center gap-3 mb-3 mt-3">
+        <div
+            class="icon-wrapper border-circle p-3 surface-card shadow-1 flex align-items-center justify-content-center">
+            <i class="pi pi-user text-primary text-5xl"></i>
+        </div>
+        <div class="flex flex-column">
+            <h1 class="m-0 text-5xl font-bold text-900">Minha Conta</h1>
+            <p class="text-500 mt-1 mb-0">Gerencie suas informações e preferências</p>
+        </div>
+    </div>
+
+
+    <div *ngIf="isLoadingInfo">
+        <p-progressbar mode="indeterminate" [style]="{ height: '6px' }" />
+    </div>
+
+    <!-- Company Info -->
+
+    <div class="surface-card p-5 border-round-2xl shadow-2 mb-4" *ngIf="!isLoadingInfo">
+        <div class="flex align-items-center gap-3 mb-4">
+            <i class="pi pi-building text-primary text-xl"></i>
+            <h2 class="m-0 text-2xl font-semibold text-900">Dados da Empresa</h2>
+        </div>
+
+        <div class="grid formgrid">
+            <div class="col-12 md:col-6 lg:col-4 mb-4" *ngFor="let field of [
+        {label: 'Razão Social', value: user?.razao_social || '—', icon: 'pi pi-id-card'},
+        {label: 'E-mail', value: user?.email || '—', icon: 'pi pi-envelope'},
+        {label: 'CNPJ/CPF', value: (user?.cnpj_cpf | maskCpfCnpj), icon: 'pi pi-file'},
+        {label: 'Telefone', value: user?.telefone || '—', icon: 'pi pi-phone'},
+        {label: 'CEP', value: user?.cep ? (user?.cep | slice:0:5) + '-' + (user?.cep | slice:5) : '—', icon: 'pi pi-map'},
+        {label: 'Endereço', value: user?.logradouro + ', ' + user?.numero + (user?.complemento ? ', ' + user?.complemento : '') + ' — ' + user?.bairro + ', ' + user?.cidade + '/' + user?.uf + ' — ' + user?.pais, icon: 'pi pi-map-marker'}
+      ]; let i = index">
+                <div class="flex align-items-center gap-2 mb-2">
+                    <i class="{{field.icon}} text-primary"></i>
+                    <label class="field-label text-sm font-medium text-600">{{ field.label }}</label>
+                </div>
+                <p class="field-value text-900 font-medium m-0 border-bottom-1 surface-border pb-2">{{ field.value }}
+                </p>
+            </div>
+        </div>
+
+        <div *ngIf="user?.atividades?.length" class="mt-5">
+            <div class="flex align-items-center gap-2 mb-3">
+                <i class="pi pi-list text-primary"></i>
+                <label class="field-label font-medium text-600">Atividades Econômicas (CNAE)</label>
+            </div>
+            <div class="flex flex-wrap gap-2">
+                <div *ngFor="let ativ of user?.atividades"
+                    class="surface-100 border-round-2xl px-3 py-2 flex align-items-center gap-2 shadow-1">
+                    <span class="font-bold text-primary">{{ ativ.cod_cnae }}</span>
+                    <span class="text-700 text-sm">{{ ativ.desc_cnae }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Password Change -->
+    <div class="surface-card p-4 border-round-2xl shadow-2" *ngIf="!isLoadingInfo">
+        <div class="flex gap-2 mb-4 align-items-center">
+            <div
+                class="icon-wrapper border-circle p-3 surface-card shadow-1 flex align-items-center justify-content-center">
+                <i class="pi pi-lock text-primary text-3xl"></i>
+            </div>
+            <div class="flex flex-column align-items-center">
+                <h2 class="m-0 text-2xl font-semibold text-900">Segurança</h2>
+                <p class="text-500 mt-1 mb-0">Altere sua senha</p>
+            </div>
+        </div>
+
+        <form (ngSubmit)="changePassword()" #passwordForm="ngForm" [class.opacity-70]="isLoading">
+            <!-- Campo escondido para compatibilidade com gerenciadores de senha -->
+            <input type="text" style="display: none" [attr.autocomplete]="'username'"
+                [value]="user?.email || user?.cnpj_cpf || ''" readonly />
+
+            <div class="grid">
+                <!-- Current Password -->
+                <div class="field col-4">
+                    <p-inputGroup>
+                        <p-inputGroupAddon>
+                            <i class="pi pi-lock text-primary"></i>
+                        </p-inputGroupAddon>
+                        <p-floatLabel variant="on">
+                            <p-password [(ngModel)]="currentPassword" inputId="currentPassword" name="currentPassword"
+                                [attr.autocomplete]="'current-password'" [toggleMask]="true" [feedback]="false"
+                                inputStyleClass="w-full" (blur)="markTouched('current')"
+                                [class.ng-invalid]="currentPasswordInvalid" [class.ng-dirty]="currentPasswordTouched">
+                            </p-password>
+                            <label for="currentPassword">Senha Atual *</label>
+                        </p-floatLabel>
+                    </p-inputGroup>
+                </div>
+
+                <!-- New Password -->
+                <div class="field col-4">
+                    <p-inputGroup>
+                        <p-inputGroupAddon>
+                            <i class="pi pi-key text-primary"></i>
+                        </p-inputGroupAddon>
+                        <p-floatLabel variant="on">
+                            <p-password [(ngModel)]="newPassword" inputId="newPassword" name="newPassword"
+                                [attr.autocomplete]="'new-password'" [toggleMask]="true" [feedback]="false"
+                                inputStyleClass="w-full" (blur)="markTouched('new')"
+                                [class.ng-invalid]="newPasswordInvalid" [class.ng-dirty]="newPasswordTouched">
+                            </p-password>
+                            <label for="newPassword">Nova Senha *</label>
+                        </p-floatLabel>
+                    </p-inputGroup>
+                </div>
+
+                <!-- Confirm New Password -->
+                <div class="field col-4">
+                    <p-inputGroup>
+                        <p-inputGroupAddon>
+                            <i class="pi pi-check-circle text-primary"></i>
+                        </p-inputGroupAddon>
+                        <p-floatLabel variant="on">
+                            <p-password [(ngModel)]="confirmNewPassword" inputId="confirmNewPassword"
+                                name="confirmNewPassword" [attr.autocomplete]="'new-password'" [toggleMask]="true"
+                                [feedback]="false" inputStyleClass="w-full" (blur)="markTouched('confirm')"
+                                [class.ng-invalid]="confirmNewPasswordInvalid"
+                                [class.ng-dirty]="confirmNewPasswordTouched">
+                            </p-password>
+                            <label for="confirmNewPassword">Confirmar Nova Senha *</label>
+                        </p-floatLabel>
+                    </p-inputGroup>
+
+                    @if (currentPassword && confirmNewPassword && !canChangePassword) {
+                    <p-message severity="error" size="small">
+                        As senhas não coincidem.
+                    </p-message>
+                    }
+                </div>
+            </div>
+
+            <div class="flex justify-content-end">
+                <p-button type="submit" label="Alterar Senha" icon="pi pi-key"
+                    [disabled]="!canChangePassword || isLoading" [loading]="isLoading" severity="success" />
+            </div>
+        </form>
+    </div>
+
+</div>

@@ -1,0 +1,65 @@
+:host {
+  display: block;
+  height: 100vh;
+}
+
+.layout-container {
+  height: 100vh;
+  overflow: hidden;
+}
+
+.top-bar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  flex-shrink: 0;
+}
+
+.icon-wrapper, .user-avatar {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+.sidebar {
+  width: 280px;
+  flex-shrink: 0;
+  overflow-y: auto;
+}
+
+.content {
+  background: var(--surface-ground);
+}
+
+.content-inner {
+  background: var(--surface-card);
+  border: 1px solid var(--surface-border);
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .top-bar {
+    padding: 1rem;
+  }
+  
+  .header-left h1 {
+    font-size: 1.25rem;
+  }
+  
+  .user-info .user-greeting {
+    display: none;
+  }
+  
+  .sidebar {
+    width: 80px;
+  }
+}
+
+@media (max-width: 480px) {
+  .header-left div:last-child {
+    display: none;
+  }
+  
+  .user-info .text-right {
+    display: none;
+  }
+}

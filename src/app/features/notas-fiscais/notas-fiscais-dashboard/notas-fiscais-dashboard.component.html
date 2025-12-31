@@ -1,0 +1,109 @@
+<div class="m-2 grid fadein animation-duration-1000 animation-iteration-count-1"
+    style="background-color: var(--surface-ground);">
+
+    <!-- Aguardando Validação -->
+    <div class="col-12 md:col-6 lg:col-3">
+        <p-card class="border-round-xl" [ngStyle]="{ position: 'relative', paddingLeft: '12px' }">
+            <div [ngStyle]="{
+      'position': 'absolute',
+      'top': '0',
+      'left': '0',
+      'width': '6px',
+      'height': '100%',
+      'background': 'linear-gradient(to bottom, #8b5cf6, rgba(139, 92, 246, 0.3))',
+      'border-top-left-radius': '8px',
+      'border-bottom-left-radius': '8px'
+    }" class="absolute"></div>
+            <div class="flex flex-column h-full">
+                <div class="flex justify-content-end">
+                    <i class="pi pi-hourglass text-purple-500 text-3xl opacity-80"></i>
+                </div>
+                <div class="text-900 text-2xl font-bold mb-1">{{ aguardandoValidacao }}</div>
+                <div class="text-600 mb-2">Aguardando Validação</div>
+                <div class="mt-auto flex justify-content-start">
+                    <p-badge value="Validação" severity="warn" [size]="'large'" />
+                </div>
+            </div>
+        </p-card>
+    </div>
+
+    <!-- Valor Total -->
+    <div class="col-12 md:col-6 lg:col-3">
+        <p-card class="border-round-xl" [ngStyle]="{ position: 'relative', paddingLeft: '12px' }">
+            <div [ngStyle]="{
+        'position': 'absolute',
+        'top': '0',
+        'left': '0',
+        'width': '6px',
+        'height': '100%',
+        'background': 'linear-gradient(to bottom, #10b981, rgba(16, 185, 129, 0.3))',
+        'border-top-left-radius': '8px',
+        'border-bottom-left-radius': '8px'
+      }" class="absolute"></div>
+            <div class="flex flex-column h-full">
+                <div class="flex justify-content-end">
+                    <i class="pi pi-wallet text-green-500 text-3xl opacity-80"></i>
+                </div>
+                <div class="text-900 text-2xl font-bold mb-1">{{ valorTotal | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}
+                </div>
+                <div class="text-600 mb-2">Valor Total</div>
+                <div class="mt-auto flex justify-content-start">
+                    <p-badge value="Receita" severity="success" [size]="'large'" />
+                </div>
+            </div>
+        </p-card>
+    </div>
+
+    <!-- Emitidas -->
+    <div class="col-12 md:col-6 lg:col-3">
+        <p-card class="border-round-xl" [ngStyle]="{ position: 'relative', paddingLeft: '12px' }">
+            <div [ngStyle]="{
+        'position': 'absolute',
+        'top': '0',
+        'left': '0',
+        'width': '6px',
+        'height': '100%',
+        'background': 'linear-gradient(to bottom, #0891b2, rgba(8, 145, 178, 0.3))',
+        'border-top-left-radius': '8px',
+        'border-bottom-left-radius': '8px'
+      }" class="absolute"></div>
+            <div class="flex flex-column h-full">
+                <div class="flex justify-content-end">
+                    <i class="pi pi-check-circle text-teal-500 text-3xl opacity-80"></i>
+                </div>
+                <div class="text-900 text-2xl font-bold mb-1">{{ emitidas }}</div>
+                <div class="text-600 mb-2">Notas Emitidas</div>
+                <div class="mt-auto flex justify-content-start">
+                    <p-badge value="Emitidas" severity="info" [size]="'large'" />
+                </div>
+            </div>
+        </p-card>
+    </div>
+
+    <!-- Pendentes -->
+    <div class="col-12 md:col-6 lg:col-3">
+        <p-card class="border-round-xl" [ngStyle]="{ position: 'relative', paddingLeft: '12px' }">
+            <div [ngStyle]="{
+        'position': 'absolute',
+        'top': '0',
+        'left': '0',
+        'width': '6px',
+        'height': '100%',
+        'background': 'linear-gradient(to bottom, #f97316, rgba(249, 115, 22, 0.3))',
+        'border-top-left-radius': '8px',
+        'border-bottom-left-radius': '8px'
+      }" class="absolute"></div>
+            <div class="flex flex-column h-full">
+                <div class="flex justify-content-end">
+                    <i class="pi pi-clock text-orange-500 text-3xl opacity-80"></i>
+                </div>
+                <div class="text-900 text-2xl font-bold mb-1">{{ pendentes }}</div>
+                <div class="text-600 mb-2">Aguardando Emissão</div>
+                <div class="mt-auto flex justify-content-start">
+                    <p-badge value="Pendentes" severity="warn" [size]="'large'"></p-badge>
+                </div>
+            </div>
+        </p-card>
+    </div>
+
+</div>

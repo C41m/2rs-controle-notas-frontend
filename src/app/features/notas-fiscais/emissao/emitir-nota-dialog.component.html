@@ -1,0 +1,270 @@
+<!-- src/app/features/notas-fiscais/emissao/emitir-nota-dialog.component.html -->
+<p-toast></p-toast>
+<p-dialog [(visible)]="visible" [modal]="true" (onHide)="fechar()" [style]="{ width: '700px' }" (onHide)="fechar()"
+  [draggable]="false" [resizable]="false" [contentStyle]="{ padding: '0' }">
+
+  <ng-template pTemplate="header">
+    <div class="flex align-items-center gap-2">
+      <div class="icon-wrapper border-circle p-3 surface-card shadow-1 flex align-items-center justify-content-center">
+        <i class="pi pi-file-edit text-primary text-3xl"></i>
+      </div>
+      <div class="flex flex-column">
+        <h1 class="m-0 text-2xl font-bold text-900">
+          {{ modo === 'criar' ? 'Emitir Nota Fiscal' : 'Editar Nota Fiscal' }}
+        </h1>
+        <p class="text-500 mt-1 mb-0">
+          {{ modo === 'criar' ? 'Preencha os dados para emitir uma nova nota' : 'Edite os dados da nota fiscal' }}
+        </p>
+      </div>
+    </div>
+  </ng-template>
+
+  <div class="pl-3 pr-3">
+    <!-- Dados do Cliente -->
+    <div class="surface-card p-3 border-round-2xl shadow-1 mb-2">
+      <div class="flex align-items-center gap-3 mb-4">
+        <i class="pi pi-user text-primary text-xl"></i>
+        <h2 class="m-0 text-2xl font-semibold text-900">Dados do Cliente</h2>
+      </div>
+
+      <div class="grid formgrid">
+        <!-- Linha 1: CNPJ/CPF + Razão Social -->
+        <div class="col-12 md:col-4 mb-3">
+          <p-inputGroup>
+            <p-inputGroupAddon>
+              <i class="pi pi-id-card text-primary"></i>
+            </p-inputGroupAddon>
+            <p-floatLabel variant="on">
+              <input pInputText id="cpf_cnpj" [value]="cpf_cnpj" (input)="onCnpjCpfInputChange($event)"
+                (blur)="onCnpjCpfBlur()" class="w-full" [disabled]="carregando || salvando" [maxLength]="17" />
+              <label for="cpf_cnpj">CNPJ/CPF *</label>
+            </p-floatLabel>
+            <p-inputGroupAddon *ngIf="carregando">
+              <i class="pi pi-spinner pi-spin text-primary"></i>
+            </p-inputGroupAddon>
+          </p-inputGroup>
+        </div>
+
+        <div class="col-12 md:col-8 mb-3">
+          <p-inputGroup>
+            <p-inputGroupAddon>
+              <i class="pi pi-building text-primary"></i>
+            </p-inputGroupAddon>
+            <p-floatLabel variant="on">
+              <input pInputText id="razao_social" [(ngModel)]="razao_social" class="w-full" required
+                [disabled]="carregando || salvando" />
+              <label for="razao_social">Razão Social *</label>
+            </p-floatLabel>
+            <p-inputGroupAddon *ngIf="carregando">
+              <i class="pi pi-spinner pi-spin text-primary"></i>
+            </p-inputGroupAddon>
+          </p-inputGroup>
+        </div>
+
+        <!-- Atividade (CNAE) -->
+        <div class="col-12 mb-3">
+          <p-inputGroup>
+            <p-inputGroupAddon>
+              <i class="pi pi-briefcase text-primary"></i>
+            </p-inputGroupAddon>
+            <p-floatLabel variant="on" class="w-full">
+              <p-select id="atividade" [(ngModel)]="cod_cnae" [options]="atividadesUsuario" optionLabel="desc_cnae"
+                optionValue="cod_cnae" required class="w-full" [disabled]="carregando">
+                <ng-template let-atividade pTemplate="selectedItem">
+                  {{ atividade.cod_cnae }} - {{ truncate(atividade.desc_cnae, 70) }}
+                </ng-template>
+                <ng-template let-atividade pTemplate="item">
+                  {{ atividade.cod_cnae }} - {{ truncate(atividade.desc_cnae, 75) }}
+                </ng-template>
+              </p-select>
+              <label for="atividade">Atividade (CNAE) *</label>
+            </p-floatLabel>
+            <p-inputGroupAddon *ngIf="carregando">
+              <i class="pi pi-spinner pi-spin text-primary"></i>
+            </p-inputGroupAddon>
+          </p-inputGroup>
+        </div>
+
+        <!-- Descrição -->
+        <div class="col-12 mb-3">
+          <p-inputGroup>
+            <p-inputGroupAddon>
+              <i class="pi pi-file text-primary"></i>
+            </p-inputGroupAddon>
+            <p-floatLabel variant="on">
+              <input pInputText id="descricao" [(ngModel)]="descricao" class="w-full" [disabled]="carregando" />
+              <label for="descricao">Descrição</label>
+            </p-floatLabel>
+            <p-inputGroupAddon *ngIf="carregando">
+              <i class="pi pi-spinner pi-spin text-primary"></i>
+            </p-inputGroupAddon>
+          </p-inputGroup>
+        </div>
+
+        <!-- Valor -->
+        <div class="col-12 mb-3">
+          <p-inputGroup>
+            <p-inputGroupAddon>
+              <i class="pi pi-money-bill text-primary"></i>
+            </p-inputGroupAddon>
+            <p-floatLabel variant="on">
+              <p-inputNumber id="valor_total" [(ngModel)]="valor_total" mode="currency" currency="BRL" locale="pt-BR" [disabled]="carregando"
+                [min]="0.01" required class="w-full">
+              </p-inputNumber>
+              <label for="valor_total">Valor (R$) *</label>
+            </p-floatLabel>
+            <p-inputGroupAddon *ngIf="carregando">
+              <i class="pi pi-spinner pi-spin text-primary"></i>
+            </p-inputGroupAddon>
+          </p-inputGroup>
+        </div>
+      </div>
+    </div>
+
+    <!-- Endereço do Cliente -->
+    <div class="surface-card p-3 border-round-2xl shadow-1 mb-2">
+      <div class="flex align-items-center gap-3 mb-4">
+        <i class="pi pi-map-marker text-primary text-xl"></i>
+        <h2 class="m-0 text-2xl font-semibold text-900">Endereço do Cliente</h2>
+      </div>
+
+      <div class="grid formgrid">
+        <!-- Linha 1: CEP + Bairro + País -->
+        <div class="col-12 sm:col-4 mb-3">
+          <p-inputGroup>
+            <p-inputGroupAddon>
+              <i class="pi pi-map text-primary"></i>
+            </p-inputGroupAddon>
+            <p-floatLabel variant="on">
+              <input pInputText [maxLength]="8" id="cep" [(ngModel)]="cep" mask="00000-000" class="w-full"
+                [disabled]="carregando" />
+              <label for="cep">CEP</label>
+            </p-floatLabel>
+            <p-inputGroupAddon *ngIf="carregando">
+              <i class="pi pi-spinner pi-spin text-primary"></i>
+            </p-inputGroupAddon>
+          </p-inputGroup>
+        </div>
+
+        <div class="col-12 sm:col-4 mb-3">
+          <p-inputGroup>
+            <p-inputGroupAddon>
+              <i class="pi pi-map-marker text-primary"></i>
+            </p-inputGroupAddon>
+            <p-floatLabel variant="on">
+              <input pInputText id="bairro" [(ngModel)]="bairro" class="w-full" [disabled]="carregando" />
+              <label for="bairro">Bairro</label>
+            </p-floatLabel>
+            <p-inputGroupAddon *ngIf="carregando">
+              <i class="pi pi-spinner pi-spin text-primary"></i>
+            </p-inputGroupAddon>
+          </p-inputGroup>
+        </div>
+
+        <div class="col-12 sm:col-4 mb-3">
+          <p-inputGroup>
+            <p-inputGroupAddon>
+              <i class="pi pi-globe text-primary"></i>
+            </p-inputGroupAddon>
+            <p-floatLabel variant="on">
+              <input pInputText id="pais" [(ngModel)]="pais" class="w-full" [disabled]="carregando" />
+              <label for="pais">País</label>
+            </p-floatLabel>
+            <p-inputGroupAddon *ngIf="carregando">
+              <i class="pi pi-spinner pi-spin text-primary"></i>
+            </p-inputGroupAddon>
+          </p-inputGroup>
+        </div>
+
+        <!-- Linha 2: Logradouro -->
+        <div class="col-12 mb-3">
+          <p-inputGroup>
+            <p-inputGroupAddon>
+              <i class="pi pi-home text-primary"></i>
+            </p-inputGroupAddon>
+            <p-floatLabel variant="on">
+              <input pInputText id="logradouro" [(ngModel)]="logradouro" class="w-full" [disabled]="carregando" />
+              <label for="logradouro">Logradouro</label>
+            </p-floatLabel>
+            <p-inputGroupAddon *ngIf="carregando">
+              <i class="pi pi-spinner pi-spin text-primary"></i>
+            </p-inputGroupAddon>
+          </p-inputGroup>
+        </div>
+
+        <!-- Linha 3: Número + Complemento -->
+        <div class="col-12 sm:col-3 mb-3">
+          <p-inputGroup>
+            <p-inputGroupAddon>
+              <i class="pi pi-hashtag text-primary"></i>
+            </p-inputGroupAddon>
+            <p-floatLabel variant="on">
+              <input pInputText id="numero" [(ngModel)]="numero" class="w-full" [disabled]="carregando" />
+              <label for="numero">Número</label>
+            </p-floatLabel>
+            <p-inputGroupAddon *ngIf="carregando">
+              <i class="pi pi-spinner pi-spin text-primary"></i>
+            </p-inputGroupAddon>
+          </p-inputGroup>
+        </div>
+
+        <div class="col-12 sm:col-9 mb-3">
+          <p-inputGroup>
+            <p-inputGroupAddon>
+              <i class="pi pi-info-circle text-primary"></i>
+            </p-inputGroupAddon>
+            <p-floatLabel variant="on">
+              <input pInputText id="complemento" [(ngModel)]="complemento" class="w-full" [disabled]="carregando" />
+              <label for="complemento">Complemento</label>
+            </p-floatLabel>
+            <p-inputGroupAddon *ngIf="carregando">
+              <i class="pi pi-spinner pi-spin text-primary"></i>
+            </p-inputGroupAddon>
+          </p-inputGroup>
+        </div>
+
+        <!-- Linha 4: UF + Cidade -->
+        <div class="col-12 sm:col-2 mb-3">
+          <p-inputGroup>
+            <p-inputGroupAddon>
+              <i class="pi pi-map text-primary"></i>
+            </p-inputGroupAddon>
+            <p-floatLabel variant="on">
+              <input pInputText id="uf" [(ngModel)]="uf" class="w-full" maxlength="2" [disabled]="carregando" />
+              <label for="uf">UF</label>
+            </p-floatLabel>
+            <p-inputGroupAddon *ngIf="carregando">
+              <i class="pi pi-spinner pi-spin text-primary"></i>
+            </p-inputGroupAddon>
+          </p-inputGroup>
+        </div>
+
+        <div class="col-12 sm:col-10 mb-3">
+          <p-inputGroup>
+            <p-inputGroupAddon>
+              <i class="pi pi-map-marker text-primary"></i>
+            </p-inputGroupAddon>
+            <p-floatLabel variant="on">
+              <input pInputText id="cidade" [(ngModel)]="cidade" class="w-full" [disabled]="carregando" />
+              <label for="cidade">Cidade</label>
+            </p-floatLabel>
+            <p-inputGroupAddon *ngIf="carregando">
+              <i class="pi pi-spinner pi-spin text-primary"></i>
+            </p-inputGroupAddon>
+          </p-inputGroup>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <ng-template pTemplate="footer">
+    <div class="flex justify-content-end gap-2 mt-2">
+      <p-button label="Cancelar" icon="pi pi-times" (onClick)="fechar()" severity="secondary" />
+      <p-button [label]="modo === 'criar' ? 'Emitir' : 'Salvar'"
+        [icon]="salvando ? 'pi pi-spin pi-spinner' : (modo === 'criar' ? 'pi pi-check' : 'pi pi-save')"
+        (onClick)="salvar()" severity="success"
+        [disabled]="!cpf_cnpj || !razao_social || valor_total === null || cod_cnae === '' || salvando" />
+    </div>
+  </ng-template>
+</p-dialog>

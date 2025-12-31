@@ -1,0 +1,210 @@
+<!-- src/app/features/notas-fiscais/shared/visualizar-nota-dialog/visualizar-nota-dialog.component.html -->
+<p-dialog [(visible)]="visible" [modal]="true" [draggable]="false" [resizable]="false" [style]="{ width: '700px'}"
+  (onHide)="onClose()" [contentStyle]="{ padding: '0'}">
+
+  <ng-template pTemplate="header">
+    <div class="flex align-items-center mt-3 gap-2 ">
+      <div class="icon-wrapper border-circle pl-3 pr-3 pt-3 surface-card shadow-1 flex align-items-center justify-content-center">
+        <i class="pi pi-file text-primary text-3xl"></i>
+      </div>
+      <div class="flex flex-column">
+        <h1 class="m-0 text-2xl font-bold text-900">Detalhes da Nota Fiscal</h1>
+        <p class="text-500 mt-1 mb-0">Visualize os detalhes da nota fiscal</p>
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-container *ngIf="nota; else noData">
+    <div class=" p-3 border border-round-2xl">
+      <!-- Cliente -->
+      <div class="surface-card p-3 border-round-2xl shadow-1 mb-2">
+        <div class="flex align-items-center gap-3 mb-4">
+          <i class="pi pi-user text-primary text-xl"></i>
+          <h2 class="m-0 text-2xl font-semibold text-900">Cliente</h2>
+        </div>
+
+        <div class="grid formgrid">
+          <div class="col-12 md:col-6">
+            <div class="flex align-items-center gap-2 mb-2">
+              <i class="pi pi-id-card text-primary"></i>
+              <label class="field-label text-sm font-medium text-600">CPF/CNPJ</label>
+            </div>
+            <p class="field-value text-900 font-medium m-0 border-bottom-1 surface-border pb-2">
+              {{ nota.cliente.cpf_cnpj | maskCpfCnpj }}
+            </p>
+          </div>
+
+          <div class="col-12 md:col-6">
+            <div class="flex align-items-center gap-2 mb-2">
+              <i class="pi pi-building text-primary"></i>
+              <label class="field-label text-sm font-medium text-600">Razão Social</label>
+            </div>
+            <p class="field-value text-900 font-medium m-0 border-bottom-1 surface-border pb-2">
+              {{ nota.cliente.razao_social || '—' }}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dados da Nota -->
+      <div class="surface-card p-3 border-round-2xl shadow-1 mb-2">
+        <div class="flex align-items-center gap-3 mb-4">
+          <i class="pi pi-receipt text-primary text-xl"></i>
+          <h2 class="m-0 text-2xl font-semibold text-900">Detalhes da Nota</h2>
+        </div>
+
+        <div class="grid formgrid">
+          <div class="col-12 md:col-4 mb-2">
+            <div class="flex align-items-center gap-2 mb-2">
+              <i class="pi pi-money-bill text-primary"></i>
+              <label class="field-label text-sm font-medium text-600">Valor Total</label>
+            </div>
+            <p class="field-value text-900 font-medium m-0 border-bottom-1 surface-border pb-2">
+              {{ nota.valor_total | currency: 'BRL':'symbol':'1.2-2' }}
+            </p>
+          </div>
+
+          <div class="col-12 md:col-4 mb-4">
+            <div class="flex align-items-center gap-2 mb-2">
+              <i class="pi pi-percentage text-primary"></i>
+              <label class="field-label text-sm font-medium text-600">Alíquota</label>
+            </div>
+            <p class="field-value text-900 font-medium m-0 border-bottom-1 surface-border pb-2">
+              {{ nota.aliquota ? (nota.aliquota + '%') : 'N/A' }}
+            </p>
+          </div>
+
+          <div class="col-12 md:col-4 mb-4">
+            <div class="flex align-items-center gap-2 mb-2">
+              <i class="pi pi-list text-primary"></i>
+              <label class="field-label text-sm font-medium text-600">CNAE</label>
+            </div>
+            <p class="field-value text-900 font-medium m-0 border-bottom-1 surface-border pb-2">
+              {{ nota.cod_cnae || '—' }}
+            </p>
+          </div>
+
+          <div class="col-12 mb-4">
+            <div class="flex align-items-center gap-2 mb-2">
+              <i class="pi pi-briefcase text-primary"></i>
+              <label class="field-label text-sm font-medium text-600">Atividade</label>
+            </div>
+            <p class="field-value text-900 font-medium m-0 border-bottom-1 surface-border pb-2">
+              {{ nota.desc_cnae }}
+            </p>
+          </div>
+
+          <div class="col-12 md:col-6 mb-4">
+            <div class="flex align-items-center gap-2 mb-2">
+              <i class="pi pi-info-circle text-primary"></i>
+              <label class="field-label text-sm font-medium text-600">Status</label>
+            </div>
+            <div class="field-value m-0 border-bottom-1 surface-border pb-2">
+              <p-tag [value]="getStatusLabel(nota.status_id)" [severity]="getStatusSeverity(nota.status_id)" />
+            </div>
+          </div>
+
+          <div class="col-12 md:col-6 mb-4">
+            <div class="flex align-items-center gap-2 mb-2">
+              <i class="pi pi-calendar text-primary"></i>
+              <label class="field-label text-sm font-medium text-600">Data da Solicitação</label>
+            </div>
+            <p class="field-value text-900 font-medium m-0 border-bottom-1 surface-border pb-2">
+              {{ nota.data_criacao | date: 'dd/MM/yyyy HH:mm' }}
+            </p>
+          </div>
+
+          <div class="col-12 mb-4">
+            <div class="flex align-items-center gap-2 mb-2">
+              <i class="pi pi-file text-primary"></i>
+              <label class="field-label text-sm font-medium text-600">Descrição</label>
+            </div>
+            <p class="field-value text-900 font-medium m-0 border-bottom-1 surface-border pb-2 whitespace-pre-line">
+              {{ nota.descricao || 'Sem descrição' }}
+            </p>
+          </div>
+
+          <div *ngIf="nota.desc_motivo" class="col-12  p-3 border-2 border-round border-orange-300 ">
+            <div class="flex align-items-center gap-2 mb-2 ">
+              <i class="pi pi-briefcase text-primary"></i>
+              <label class="field-label text-sm font-medium text-600">Motivo de Recusa</label>
+            </div>
+            <p class="field-value text-900 font-medium m-0 border-bottom-1  surface-border pb-2">
+              {{ nota.desc_motivo }}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Endereço -->
+      <div class="surface-card p-3 border-round-2xl shadow-1">
+        <div class="flex align-items-center gap-3 mb-4">
+          <i class="pi pi-map-marker text-primary text-xl"></i>
+          <h2 class="m-0 text-2xl font-semibold text-900">Endereço</h2>
+        </div>
+
+        <div class="grid formgrid">
+          <div class="col-12 md:col-6 mb-4">
+            <div class="flex align-items-center gap-2 mb-2">
+              <i class="pi pi-map text-primary"></i>
+              <label class="field-label text-sm font-medium text-600">Logradouro</label>
+            </div>
+            <p class="field-value text-900 font-medium m-0 border-bottom-1 surface-border pb-2">
+              {{ nota.cliente.logradouro || '—' }}
+            </p>
+          </div>
+
+          <div class="col-12 md:col-6 mb-4">
+            <div class="flex align-items-center gap-2 mb-2">
+              <i class="pi pi-home text-primary"></i>
+              <label class="field-label text-sm font-medium text-600">Número / Complemento</label>
+            </div>
+            <p class="field-value text-900 font-medium m-0 border-bottom-1 surface-border pb-2">
+              {{ nota.cliente.numero || '—' }} {{ nota.cliente.complemento ? (' / ' + nota.cliente.complemento) : '' }}
+            </p>
+          </div>
+
+          <div class="col-12 md:col-6 mb-4">
+            <div class="flex align-items-center gap-2 mb-2">
+              <i class="pi pi-map-marker text-primary"></i>
+              <label class="field-label text-sm font-medium text-600">Bairro</label>
+            </div>
+            <p class="field-value text-900 font-medium m-0 border-bottom-1 surface-border pb-2">
+              {{ nota.cliente.bairro || '—' }}
+            </p>
+          </div>
+
+          <div class="col-12 md:col-6 mb-4">
+            <div class="flex align-items-center gap-2 mb-2">
+              <i class="pi pi-map text-primary"></i>
+              <label class="field-label text-sm font-medium text-600">CEP</label>
+            </div>
+            <p class="field-value text-900 font-medium m-0 border-bottom-1 surface-border pb-2">
+              {{ nota.cliente.cep ? (nota.cliente.cep | slice:0:5) + '-' + (nota.cliente.cep | slice:5) : '—' }}
+            </p>
+          </div>
+
+          <div class="col-12 md:col-6 mb-4">
+            <div class="flex align-items-center gap-2 mb-2">
+              <i class="pi pi-globe text-primary"></i>
+              <label class="field-label text-sm font-medium text-600">Cidade / UF</label>
+            </div>
+            <p class="field-value text-900 font-medium m-0 border-bottom-1 surface-border pb-2">
+              {{ nota.cliente.cidade || '—' }} / {{ nota.cliente.uf || '—' }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-template #noData>
+    <div class="p-5">
+      <p class="text-center text-500">Nenhuma nota selecionada.</p>
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <p-button label="Fechar" icon="pi pi-times" (onClick)="onClose()" severity="secondary" />
+  </ng-template>
+</p-dialog>

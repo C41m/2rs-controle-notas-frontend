@@ -1,0 +1,277 @@
+<!-- src/app/features/admin/user-form/user-form.component.html -->
+<form (ngSubmit)="onSubmit()" class="w-full">
+  <!-- Dados Principais -->
+  <div class="surface-card p-3 border-round-2xl shadow-1 mb-2">
+    <div class="flex align-items-center gap-3 mb-4">
+      <i class="pi pi-user text-primary text-xl"></i>
+      <h2 class="m-0 text-2xl font-semibold text-900">Dados Principais</h2>
+    </div>
+
+    <div class="grid formgrid">
+      <!-- Linha 1: CNPJ/CPF + Razão Social -->
+      <div class="col-12 md:col-4 mb-3">
+        <p-inputGroup>
+          <p-inputGroupAddon>
+            <i class="pi pi-id-card text-primary"></i>
+          </p-inputGroupAddon>
+          <p-floatLabel variant="on">
+            <input pInputText id="cnpj_cpf" [value]="usuario.cnpj_cpf" (input)="onCnpjCpfInput($event)"
+              class="w-full" />
+            <label for="cnpj_cpf">CNPJ/CPF *</label>
+          </p-floatLabel>
+        </p-inputGroup>
+      </div>
+
+      <div class="col-12 md:col-8 mb-3">
+        <p-inputGroup>
+          <p-inputGroupAddon>
+            <i class="pi pi-building text-primary"></i>
+          </p-inputGroupAddon>
+          <p-floatLabel variant="on">
+            <input pInputText id="razao_social" [(ngModel)]="usuario.razao_social" name="razao_social" required
+              class="w-full" />
+            <label for="razao_social">Razão Social *</label>
+          </p-floatLabel>
+        </p-inputGroup>
+      </div>
+
+      <!-- Linha 2: CEP + Email + Telefone -->
+
+      <div class="col-12 sm:col-4 mb-3">
+        <p-inputGroup>
+          <p-inputGroupAddon>
+            <i class="pi pi-file text-primary"></i>
+          </p-inputGroupAddon>
+          <p-floatLabel variant="on">
+            <input pInputText id="insc_municipal" [(ngModel)]="usuario.insc_municipal" name="insc_municipal"
+              class="w-full" />
+            <label for="insc_municipal">Inscrição Municipal</label>
+          </p-floatLabel>
+        </p-inputGroup>
+      </div>
+
+      <div class="col-12 sm:col-4 mb-3">
+        <p-inputGroup>
+          <p-inputGroupAddon>
+            <i class="pi pi-envelope text-primary"></i>
+          </p-inputGroupAddon>
+          <p-floatLabel variant="on">
+            <input pInputText id="email" type="email" [(ngModel)]="usuario.email" name="email" class="w-full" />
+            <label for="email">E-mail</label>
+          </p-floatLabel>
+        </p-inputGroup>
+      </div>
+
+      <div class="col-12 sm:col-4 mb-3">
+        <p-inputGroup>
+          <p-inputGroupAddon>
+            <i class="pi pi-phone text-primary"></i>
+          </p-inputGroupAddon>
+          <p-floatLabel variant="on">
+            <input pInputText id="telefone" [(ngModel)]="usuario.telefone" name="telefone" class="w-full" />
+            <label for="telefone">Telefone</label>
+          </p-floatLabel>
+        </p-inputGroup>
+      </div>
+
+      <div class="col-12 sm:col-3 mb-3 flex justify-content-center align-items-center">
+        <p-toggleSwitch id="emite" [(ngModel)]="usuario.emite" name="emite" />
+        <label for="emite" class="ml-2 mb-0">Emite nota fiscal?</label>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Endereço -->
+  <div class="surface-card p-3 border-round-2xl shadow-1 mb-2">
+    <div class="flex align-items-center gap-3 mb-4">
+      <i class="pi pi-map-marker text-primary text-xl"></i>
+      <h2 class="m-0 text-2xl font-semibold text-900">Endereço</h2>
+    </div>
+
+    <div class="grid formgrid">
+      <!-- Linha 1: País + UF + Cidade -->
+
+      <div class="col-12 sm:col-3 mb-3">
+        <p-inputGroup>
+          <p-inputGroupAddon>
+            <i class="pi pi-map text-primary"></i>
+          </p-inputGroupAddon>
+          <p-floatLabel variant="on">
+            <input pInputText id="cep" [(ngModel)]="usuario.cep" name="cep" mask="00000-000" class="w-full" />
+            <label for="cep">CEP</label>
+          </p-floatLabel>
+        </p-inputGroup>
+      </div>
+
+      <div class="col-12 sm:col-2 mb-3">
+        <p-inputGroup>
+          <p-inputGroupAddon>
+            <i class="pi pi-globe text-primary"></i>
+          </p-inputGroupAddon>
+          <p-floatLabel variant="on">
+            <input pInputText id="pais" [(ngModel)]="usuario.pais" name="pais" class="w-full" placeholder="Brasil" />
+            <label for="pais">País</label>
+          </p-floatLabel>
+        </p-inputGroup>
+      </div>
+
+      <div class="col-12 sm:col-2 mb-3">
+        <p-inputGroup>
+          <p-inputGroupAddon>
+            <i class="pi pi-map text-primary"></i>
+          </p-inputGroupAddon>
+          <p-floatLabel variant="on">
+            <input pInputText id="uf" [(ngModel)]="usuario.uf" name="uf" class="w-full" maxlength="2" />
+            <label for="uf">UF</label>
+          </p-floatLabel>
+        </p-inputGroup>
+      </div>
+
+      <div class="col-12 sm:col-5 mb-3">
+        <p-inputGroup>
+          <p-inputGroupAddon>
+            <i class="pi pi-map-marker text-primary"></i>
+          </p-inputGroupAddon>
+          <p-floatLabel variant="on">
+            <input pInputText id="cidade" [(ngModel)]="usuario.cidade" name="cidade" class="w-full" />
+            <label for="cidade">Cidade</label>
+          </p-floatLabel>
+        </p-inputGroup>
+      </div>
+
+      <!-- Linha 2: Logradouro -->
+      <div class="col-12 mb-3">
+        <p-inputGroup>
+          <p-inputGroupAddon>
+            <i class="pi pi-home text-primary"></i>
+          </p-inputGroupAddon>
+          <p-floatLabel variant="on">
+            <input pInputText id="logradouro" [(ngModel)]="usuario.logradouro" name="logradouro" class="w-full" />
+            <label for="logradouro">Logradouro</label>
+          </p-floatLabel>
+        </p-inputGroup>
+      </div>
+
+      <!-- Linha 3: Número + Complemento + Bairro + Alíquota -->
+      <div class="col-12 sm:col-2 mb-3">
+        <p-inputGroup>
+          <p-inputGroupAddon>
+            <i class="pi pi-hashtag text-primary"></i>
+          </p-inputGroupAddon>
+          <p-floatLabel variant="on">
+            <input pInputText id="numero" [(ngModel)]="usuario.numero" name="numero" class="w-full" />
+            <label for="numero">Número</label>
+          </p-floatLabel>
+        </p-inputGroup>
+      </div>
+
+      <div class="col-12 sm:col-4 mb-3">
+        <p-inputGroup>
+          <p-inputGroupAddon>
+            <i class="pi pi-info-circle text-primary"></i>
+          </p-inputGroupAddon>
+          <p-floatLabel variant="on">
+            <input pInputText id="complemento" [(ngModel)]="usuario.complemento" name="complemento" class="w-full" />
+            <label for="complemento">Complemento</label>
+          </p-floatLabel>
+        </p-inputGroup>
+      </div>
+
+      <div class="col-12 sm:col-3 mb-3">
+        <p-inputGroup>
+          <p-inputGroupAddon>
+            <i class="pi pi-map text-primary"></i>
+          </p-inputGroupAddon>
+          <p-floatLabel variant="on">
+            <input pInputText id="bairro" [(ngModel)]="usuario.bairro" name="bairro" class="w-full" />
+            <label for="bairro">Bairro</label>
+          </p-floatLabel>
+        </p-inputGroup>
+      </div>
+
+      <div class="col-12 sm:col-3 mb-3">
+        <p-inputGroup>
+          <p-inputGroupAddon>
+            <i class="pi pi-dollar text-primary"></i>
+          </p-inputGroupAddon>
+          <p-floatLabel variant="on">
+            <p-inputNumber id="aliquota" [(ngModel)]="usuario.aliquota" name="aliquota" mode="decimal" [min]="0"
+              [max]="100" [minFractionDigits]="2" [maxFractionDigits]="2" suffix=" %" class="w-full"></p-inputNumber>
+            <label for="aliquota">Alíquota (%)</label>
+          </p-floatLabel>
+        </p-inputGroup>
+      </div>
+    </div>
+  </div>
+
+  <!-- Seção de Atividades -->
+  <div class="surface-card p-3 border-round-2xl shadow-1 mb-2">
+    <div class="flex align-items-center gap-3 mb-4">
+      <i class="pi pi-briefcase text-primary text-xl"></i>
+      <h2 class="m-0 text-2xl font-semibold text-900">Atividades (CNAE) da Empresa</h2>
+    </div>
+
+    <!-- Tabela de Atividades -->
+    <p-table [value]="usuario.atividades" [showCurrentPageReport]="true"
+      currentPageReportTemplate="Exibindo {first} a {last} de {totalRecords}" [rowsPerPageOptions]="[5, 10, 20]"
+      responsiveLayout="scroll" [tableStyle]="{ 'min-width': '40rem' }">
+      <ng-template pTemplate="header">
+        <tr>
+          <th pSortableColumn="cod_cnae">Código CNAE <p-sortIcon field="cod_cnae" /></th>
+          <th pSortableColumn="desc_cnae">Descrição <p-sortIcon field="desc_cnae" /></th>
+          <th style="width: 8rem">Ações</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-atividade let-i="rowIndex">
+        <tr>
+          <td class="font-mono">{{ atividade.cod_cnae }}</td>
+          <td>{{ atividade.desc_cnae }}</td>
+          <td>
+            <button pButton pRipple icon="pi pi-trash" class="p-button-text p-button-danger p-button-sm"
+              (click)="removerAtividade(i)" title="Remover"></button>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="3" class="text-center py-4">
+            Nenhuma atividade cadastrada.
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+
+    <!-- Formulário para adicionar nova atividade -->
+    <div class="flex flex-wrap gap-3 mt-3 p-3 bg-gray-50 border-round">
+      <div class="flex-1 min-w-[130px]">
+        <p-floatLabel variant="on">
+          <input pInputText [(ngModel)]="novaAtividadeCodigo" placeholder="Ex: 6201500" name="novaAtividadeCodigo"
+            class="w-full p-inputtext-sm" maxlength="7" />
+          <label for="novaAtividadeCodigo">Código CNAE</label>
+        </p-floatLabel>
+      </div>
+      <div class="flex-1 min-w-[180px]">
+        <p-floatLabel variant="on">
+          <input pInputText [(ngModel)]="novaAtividadeDescricao" placeholder="Ex: Desenvolvimento..."
+            name="novaAtividadeDescricao" class="w-full p-inputtext-sm" />
+          <label for="novaAtividadeDescricao">Descrição</label>
+        </p-floatLabel>
+      </div>
+      <div class="flex items-end">
+        <button pButton pRipple icon="pi pi-plus" class="p-button-sm p-button-success"
+          (click)="adicionarAtividadeManual()" [disabled]="!podeAdicionarAtividade()"></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Botões -->
+  <div class="flex justify-content-end gap-2 mt-6 pt-4 border-top-1 surface-border">
+    <button pButton pRipple type="button" label="Cancelar" (click)="onCancel()" class="p-button-secondary"></button>
+
+    <button *ngIf="usuarioInicial?.id" pButton pRipple type="button" label="Redefinir Senha" (click)="redefinirSenha()"
+      class="p-button-help"></button>
+
+    <button pButton pRipple type="submit" label="Salvar" class="p-button-primary"></button>
+  </div>
+</form>

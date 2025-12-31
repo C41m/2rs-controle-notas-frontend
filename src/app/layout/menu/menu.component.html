@@ -1,0 +1,114 @@
+<!-- menu.component.html -->
+<nav class="flex flex-column h-full p-3 gap-4 surface-ground">
+  <!-- Header do Menu -->
+  <div class="menu-header flex align-items-center gap-3 p-3 surface-card border-round-2xl shadow-1">
+    <div class="icon-wrapper border-circle p-2 surface-primary flex align-items-center justify-content-center">
+      <i class="pi pi-file-invoice text-white text-lg"></i>
+    </div>
+    <div class="flex flex-column">
+      <span class="font-bold text-900">Controle Fiscal</span>
+      <span class="text-xs text-500">Painel de Controle</span>
+    </div>
+  </div>
+
+  <!-- Conteúdo do Menu -->
+  @if (auth.currentUser$ | async; as user) {
+  <div class="menu-content flex flex-column flex-1 gap-4 overflow-auto">
+    @if (user.role_id !== 1) {
+    <!-- Seção PRINCIPAL -->
+    <div class="menu-section">
+      <div class="category flex align-items-center gap-2 text-sm font-semibold text-600 mb-2 p-2">
+        <i class="pi pi-home text-primary"></i>
+        <span>PRINCIPAL</span>
+      </div>
+
+      <div class="menu-items flex flex-column gap-2">
+        <a routerLink="/notas-fiscais" routerLinkActive="active"
+          class="menu-item p-3 flex align-items-center gap-3 border-round-xl transition-all transition-duration-200 no-underline surface-card shadow-1 hover:shadow-2">
+          <div class="icon-container border-circle p-2 surface-hover flex align-items-center justify-content-center">
+            <i class="pi pi-file text-primary"></i>
+          </div>
+          <div class="flex flex-column">
+            <span class="font-medium text-900">Notas Fiscais</span>
+            <span class="text-xs text-500">Gerenciar notas</span>
+          </div>
+          <i class="pi pi-chevron-right text-400 ml-auto"></i>
+        </a>
+
+        <!-- <a routerLink="/clientes" routerLinkActive="active"
+          class="menu-item p-3 flex align-items-center gap-3 border-round-xl transition-all transition-duration-200 no-underline surface-card shadow-1 hover:shadow-2">
+          <div class="icon-container border-circle p-2 surface-hover flex align-items-center justify-content-center">
+            <i class="pi pi-users text-primary"></i>
+          </div>
+          <div class="flex flex-column">
+            <span class="font-medium text-900">Clientes</span>
+            <span class="text-xs text-500">Cadastro de clientes</span>
+          </div>
+          <i class="pi pi-chevron-right text-400 ml-auto"></i>
+        </a> -->
+
+        <a routerLink="/conta" routerLinkActive="active"
+          class="menu-item p-3 flex align-items-center gap-3 border-round-xl transition-all transition-duration-200 no-underline surface-card shadow-1 hover:shadow-2">
+          <div class="icon-container border-circle p-2 surface-hover flex align-items-center justify-content-center">
+            <i class="pi pi-user text-primary"></i>
+          </div>
+          <div class="flex flex-column">
+            <span class="font-medium text-900">Minha Conta</span>
+            <span class="text-xs text-500">Configurações</span>
+          </div>
+          <i class="pi pi-chevron-right text-400 ml-auto"></i>
+        </a>
+      </div>
+    </div>
+    }
+
+    <!-- Seção ADMIN (só se for admin) -->
+    @if (user.role_id === 1) {
+    <div class="menu-section">
+      <div class="category flex align-items-center gap-2 text-sm font-semibold text-600 mb-2 p-2">
+        <i class="pi pi-shield text-red-500"></i>
+        <span>ADMINISTRAÇÃO</span>
+      </div>
+
+      <div class="menu-items flex flex-column gap-2">
+        <a routerLink="/admin/usuarios" routerLinkActive="active"
+          class="menu-item p-3 flex align-items-center gap-3 border-round-xl transition-all transition-duration-200 no-underline surface-card shadow-1 hover:shadow-2">
+          <div class="icon-container border-circle p-2 surface-hover flex align-items-center justify-content-center">
+            <i class="pi pi-cog text-primary"></i>
+          </div>
+          <div class="flex flex-column">
+            <span class="font-medium text-900">Usuários</span>
+            <span class="text-xs text-500">Gerenciar usuários</span>
+          </div>
+          <i class="pi pi-chevron-right text-400 ml-auto"></i>
+        </a>
+
+        <a routerLink="/admin/notas-fiscais" routerLinkActive="active"
+          class="menu-item p-3 flex align-items-center gap-3 border-round-xl transition-all transition-duration-200 no-underline surface-card shadow-1 hover:shadow-2">
+          <div class="icon-container border-circle p-2 surface-hover flex align-items-center justify-content-center">
+            <i class="pi pi-file-edit text-primary"></i>
+          </div>
+          <div class="flex flex-column">
+            <span class="font-medium text-900">Notas Fiscais</span>
+            <span class="text-xs text-500">Todas as notas</span>
+          </div>
+          <i class="pi pi-chevron-right text-400 ml-auto"></i>
+        </a>
+      </div>
+    </div>
+    }
+  </div>
+  }
+
+  <!-- Footer do Menu - SEMPRE NO FINAL -->
+  <div class="menu-footer surface-card border-round-2xl p-3 shadow-1 mt-auto">
+    <div class="flex align-items-center gap-3">
+      <div class="status-indicator border-circle w-2 h-2 bg-green-500 shadow-1"></div>
+      <div class="flex flex-column flex-1">
+        <span class="text-sm font-medium text-900">Sistema Ativo</span>
+        <span class="text-xs text-500">Controle de Notas Fiscais</span>
+      </div>
+      <i class="pi pi-verified text-green-500"></i>
+    </div>
+  </div>
+</nav>

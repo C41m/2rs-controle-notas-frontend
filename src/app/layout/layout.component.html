@@ -1,0 +1,59 @@
+<!-- src/app/layout/layout.component.html -->
+<div class="layout-container min-h-screen flex flex-column surface-ground">
+  <!-- Header -->
+  <header
+    class="top-bar surface-section shadow-2 p-3 flex align-items-center justify-content-between border-bottom-1 surface-border">
+    <div class="header-left flex align-items-center gap-3">
+      <button pButton pRipple icon="pi pi-bars" class="p-button-text p-button-icon-only surface-ground rounded-circle"
+        (click)="toggleDrawer()" style="width: 2.5rem; height: 2.5rem" [attr.aria-expanded]="drawerVisible"
+        [attr.aria-controls]="drawerVisible ? 'app-drawer' : null">
+      </button>
+
+      <div class="icon-wrapper border-circle p-2 surface-card shadow-1 flex align-items-center justify-content-center">
+        <i class="pi pi-file-invoice text-primary text-xl"></i>
+      </div>
+      <div>
+        <h1 class="text-2xl font-bold text-900 m-0">Controle de Notas Fiscais</h1>
+        <p class="text-500 text-sm mt-1 mb-0">Sistema de gerenciamento fiscal</p>
+      </div>
+    </div>
+
+    <div class="user-info flex align-items-center gap-4">
+      @if (auth.currentUser$ | async; as user) {
+      <div class="flex align-items-center gap-3">
+        <div class="user-avatar border-circle p-2 surface-card shadow-1 flex align-items-center justify-content-center">
+          <i class="pi pi-user text-primary"></i>
+        </div>
+        <div class="flex flex-column text-right">
+          <span class="user-greeting text-900 font-semibold">{{ user.razao_social || user.email }}</span>
+          <span class="text-500 text-sm">Usuário logado</span>
+        </div>
+      </div>
+      <button pButton pRipple label="Sair" icon="pi pi-sign-out" class="p-button-outlined p-button-danger"
+        (click)="logout()">
+      </button>
+      }
+    </div>
+  </header>
+
+  <!-- Conteúdo principal (SEM sidebar fixa!) -->
+  <main class="flex-1 p-4 overflow-auto">
+    <div class="content-inner surface-card border-round-2xl shadow-1 p-4 min-h-full">
+      <router-outlet></router-outlet>
+    </div>
+  </main>
+</div>
+
+<!-- Drawer do PrimeNG -->
+<p-drawer [(visible)]="drawerVisible" position="left" styleClass="w-20rem" [modal]="true" [showCloseIcon]="false"
+  id="app-drawer" role="navigation">
+
+  <ng-template #header>
+    <div class="flex align-items-center gap-2">
+      <i class="pi pi-file-invoice text-primary text-xl"></i>
+      <span class="font-bold text-lg">Menu</span>
+    </div>
+  </ng-template>
+
+  <app-menu></app-menu>
+</p-drawer>

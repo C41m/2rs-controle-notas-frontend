@@ -1,0 +1,22 @@
+<p-dialog header="Recusar Nota Fiscal" [(visible)]="visible" [modal]="true" [style]="{ width: '500px' }"
+    [draggable]="false" [resizable]="false" (onHide)="onCancel()">
+    <div class="flex flex-column gap-3">
+        <p class="m-0 text-lg">
+            Informe o motivo da recusa:
+        </p>
+        <textarea pInputTextarea [(ngModel)]="motivo" rows="4" cols="50"
+            placeholder="Ex: Dados inconsistentes, valor incorreto, etc." class="w-full p-inputtext-sm"
+            [autoResize]="true" required></textarea>
+        <small class="text-danger" *ngIf="!motivoValido && motivoTouched">
+            O motivo é obrigatório.
+        </small>
+    </div>
+
+    <ng-template pTemplate="footer">
+        <div class="flex justify-content-end gap-2">
+            <p-button label="Cancelar" (click)="onCancel()" severity="secondary"
+                [disabled]="loading" />
+            <p-button label="Recusar" (click)="onConfirm()" severity="danger" [loading]="loading" [disabled]="!motivo" />
+        </div>
+    </ng-template>
+</p-dialog>
