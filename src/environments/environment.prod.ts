@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://comunica-backend.onrender.com'
+  apiUrl: 'https://twors-controle-notas-backend.onrender.com'
 };
