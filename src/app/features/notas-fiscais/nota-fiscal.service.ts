@@ -34,6 +34,9 @@ export interface MinhaNotaFiscal {
   descricao: string | null;
   cliente: Cliente; // ← este cliente é o PRÓPRIO USUÁRIO
   desc_motivo: string | null;
+  id_api: string | null;
+  link_api_pdf: string | null;
+  link_api_xml: string | null;
 }
 
 

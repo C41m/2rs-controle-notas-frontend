@@ -158,7 +158,7 @@ export class UserListComponent implements OnInit {
 
   onSalvar(usuario: CreateUser) {
     const payload = { ...usuario, aliquota: usuario.aliquota ?? null };
-    console.log('Payload:', payload)
+    //console.log('Payload:', payload)
     this.loadingTabela = true; // 👈 ativa loader
 
     const saveObservable = this.usuarioEmEdicao
@@ -177,7 +177,7 @@ export class UserListComponent implements OnInit {
         }
         this.exibirModal = false;
         this.usuarioEmEdicao = null;
-        this.carregarUsuarios();
+        this.loadingTabela = false;
       },
       error: (err) => {
         console.error('Erro ao salvar usuário:', err);

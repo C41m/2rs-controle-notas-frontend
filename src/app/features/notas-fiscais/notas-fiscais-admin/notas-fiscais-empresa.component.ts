@@ -118,6 +118,23 @@ export class NotasFiscaisEmpresaComponent implements OnInit {
         });
     }
 
+    visualizarPdf(nota: NotaFiscalAdmin): void {
+        if (this.loadingTabela) return;
+        const url = nota.link_api_pdf?.trim();
+        if (url) {
+            window.open(url, '_blank', 'noopener,noreferrer');
+        }
+    }
+
+    visualizarXml(nota: NotaFiscalAdmin): void {
+        if (this.loadingTabela) return;
+        const url = nota.link_api_xml?.trim();
+        if (url) {
+            window.open(url, '_blank', 'noopener,noreferrer');
+        }
+    }
+
+
     recusarNota(nota: NotaFiscalAdmin) {
         this.notaParaRecusar = nota;
         this.modalRecusarVisivel = true;
@@ -139,7 +156,8 @@ export class NotasFiscaisEmpresaComponent implements OnInit {
             },
             error: (err) => {
                 console.error('Erro ao emitir nota:', err);
-                this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Falha ao emitir nota.' });
+                this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Falha ao emitir nota: ' + err.message || '' });
+                this.loadingAcao = null
             },
             complete: () => {
                 this.loadingAcao = null
@@ -178,10 +196,11 @@ export class NotasFiscaisEmpresaComponent implements OnInit {
 
     getStatusSeverity(statusId: number): 'success' | 'info' | 'warn' | 'danger' | 'secondary' {
         switch (statusId) {
-            case 1: return 'secondary'; // Aguardando
-            case 2: return 'success';   // Aprovada
-            case 3: return 'warn';      // Recusada
-            case 4: return 'info';      // Emitida (ou outro)
+            case 1: return 'secondary';        // Aguardando Validação
+            case 2: return 'success';     // Emitida
+            case 3: return 'danger';      // Cancelada
+            case 4: return 'info';        // Aprovada
+            case 6: return 'info';        // Processamento
             default: return 'secondary';
         }
     }

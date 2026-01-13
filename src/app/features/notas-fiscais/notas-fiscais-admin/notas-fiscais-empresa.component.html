@@ -37,16 +37,16 @@
   <!-- Toolbar -->
   <div class="flex justify-content-between align-items-center mb-4">
     <div class="flex align-items-center gap-2 flex-wrap">
-      <p-button icon="pi pi-filter-slash" [rounded]="true" [text]="true" (click)="clearFilters()" pTooltip="Limpar filtros"
-        tooltipPosition="top" />
+      <p-button icon="pi pi-filter-slash" [rounded]="true" [text]="true" (click)="clearFilters()"
+        pTooltip="Limpar filtros" tooltipPosition="top" />
 
       <!-- Campo de pesquisa -->
       <p-iconField iconPosition="left">
         <p-inputIcon>
           <i class="pi pi-search"></i>
         </p-inputIcon>
-        <input pInputText type="text"   [(ngModel)]="globalFilterValue" (input)="onGlobalFilter($event)" placeholder="Pesquisar notas..."
-          class="w-20rem border-round-2xl" />
+        <input pInputText type="text" [(ngModel)]="globalFilterValue" (input)="onGlobalFilter($event)"
+          placeholder="Pesquisar notas..." class="w-20rem border-round-2xl" />
       </p-iconField>
 
       <!-- Dropdown de status -->
@@ -226,6 +226,14 @@
                 pTooltip="Recusar" tooltipPosition="top" styleClass="w-2rem h-2rem" [loading]="estaCarregando(nota.id)"
                 [disabled]="estaCarregando(nota.id)" />
             </ng-container>
+
+            <p-button *ngIf="nota.status_id === 2" icon="pi pi-file-excel" [rounded]="true" [text]="true"
+              severity="success" (click)="visualizarXml(nota)" pTooltip="Visualizar Nota Fiscal (XML)"
+              tooltipPosition="top" styleClass="w-2rem h-2rem" />
+
+            <p-button *ngIf="nota.status_id === 2" icon="pi pi-file-pdf" [rounded]="true" [text]="true"
+              severity="success" (click)="visualizarPdf(nota)" pTooltip="Visualizar Nota Fiscal (PDF)"
+              tooltipPosition="top" styleClass="w-2rem h-2rem" />
 
             <!-- Se já foi aprovada ou recusada, mostra apenas o status -->
             <ng-container *ngIf="nota.status_id !== 1">

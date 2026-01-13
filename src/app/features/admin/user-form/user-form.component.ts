@@ -16,6 +16,7 @@ import { InputMaskModule } from 'primeng/inputmask';
 import { TableModule } from 'primeng/table';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { MessageService, ConfirmationService } from 'primeng/api';
+import { ProgressBarModule } from 'primeng/progressbar';
 
 import { Atividade, CreateUser, User, UserService } from '../user.service';
 
@@ -55,7 +56,8 @@ interface ApiResponse {
     FloatLabelModule,
     InputMaskModule,
     TableModule,
-    ToggleSwitchModule
+    ToggleSwitchModule,
+    ProgressBarModule
   ],
   templateUrl: './user-form.component.html',
   styleUrls: ['./user-form.component.scss']
@@ -76,24 +78,27 @@ export class UserFormComponent {
     }
   }
 
+
   get usuarioInicial(): User | null {
     return this._usuarioInicial;
   }
 
   @Output() salvar = new EventEmitter<CreateUser>();
   @Output() cancelar = new EventEmitter<void>();
+  @Input() loading = false; // agora vem do pai
 
   usuario: CreateUser = this.getUsuarioVazio();
 
   novaAtividadeCodigo: string = '';
   novaAtividadeDescricao: string = '';
+  loadingForm: boolean = false;
 
   constructor(
     private http: HttpClient,
     private userService: UserService,
     private confirmationService: ConfirmationService,
     private messageService: MessageService
-  ) {}
+  ) { }
 
   private getUsuarioVazio(): CreateUser {
     return {
@@ -211,6 +216,7 @@ export class UserFormComponent {
 
   onSubmit() {
     if (this.usuario.razao_social && this.usuario.cnpj_cpf) {
+      this.loadingForm = true;
       this.salvar.emit({ ...this.usuario });
     }
   }

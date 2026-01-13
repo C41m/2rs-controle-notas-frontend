@@ -159,6 +159,15 @@
                   [rounded]="true" [text]="true" severity="success" (click)="emitirNota(nota)"
                   pTooltip="Emitir Nota Fiscal" tooltipPosition="top" styleClass="w-2rem h-2rem"
                   [disabled]="loadingTabela" />
+
+                <p-button *ngIf="nota.status_id === 2" icon="pi pi-file-excel" [rounded]="true" [text]="true"
+                  severity="success" (click)="visualizarXml(nota)" pTooltip="Visualizar Nota Fiscal (XML)"
+                  tooltipPosition="top" styleClass="w-2rem h-2rem" [disabled]="loadingTabela" />
+
+                <p-button *ngIf="nota.status_id === 2" icon="pi pi-file-pdf" [rounded]="true" [text]="true"
+                  severity="success" (click)="visualizarPdf(nota)" pTooltip="Visualizar Nota Fiscal (PDF)"
+                  tooltipPosition="top" styleClass="w-2rem h-2rem" [disabled]="loadingTabela" />
+
               </ng-container>
             </div>
           </td>

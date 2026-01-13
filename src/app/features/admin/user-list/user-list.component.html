@@ -18,7 +18,7 @@
 </div>
 
 <!-- Main Card -->
-<div class="surface-card p-4 border-round-2xl shadow-1">
+<div *ngIf="!loadingTabela" class="surface-card p-4 border-round-2xl shadow-1">
 
     <!-- Toolbar -->
     <div class="flex justify-content-between align-items-center mb-4">
@@ -162,6 +162,6 @@
 <p-dialog [(visible)]="exibirModal" [modal]="true" [draggable]="false" [resizable]="false"
     [header]="usuarioEmEdicao ? 'Editar Usuário' : 'Cadastrar Novo Usuário'" (onHide)="onCancelar()"
     styleClass="w-8">
-    <app-user-form [usuarioInicial]="usuarioEmEdicao" (salvar)="onSalvar($event)" (cancelar)="onCancelar()">
+    <app-user-form [usuarioInicial]="usuarioEmEdicao" [loading]="loadingTabela" (salvar)="onSalvar($event)" (cancelar)="onCancelar()">
     </app-user-form>
 </p-dialog>

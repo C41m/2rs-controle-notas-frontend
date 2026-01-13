@@ -29,6 +29,7 @@ import { ConfirmationService } from 'primeng/api';
 import { ConfirmDialog } from "primeng/confirmdialog";
 import { AuthService } from '../../../core/auth.service';
 import { User } from '../../admin/user.service';
+import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
   selector: 'app-notas-fiscais',
@@ -52,6 +53,7 @@ import { User } from '../../admin/user.service';
     VisualizarNotaUsuarioDialogComponent,
     ProgressBarModule,
     NotasFiscaisDashboardComponent,
+    TooltipModule
   ],
   providers: [MessageService],
   templateUrl: './notas-fiscais.component.html',
@@ -125,11 +127,11 @@ export class NotasFiscaisComponent implements OnInit {
       complete: () => {
         this.loadingTabela = false;
         this.loadingInicial = false; // ✅ Tudo pronto!
+        console.log('Notas carregadas:', this.notas);
       }
     });
   }
 
-  
   abrirModal() {
     this.modoModal = 'criar';
     this.notaIdParaEdicao = null;
@@ -150,6 +152,22 @@ export class NotasFiscaisComponent implements OnInit {
   visualizarNota(nota: MinhaNotaFiscal) {
     this.notaVisualizar = nota;
     this.modalVisualizarUsuarioVisible = true;
+  }
+
+  visualizarPdf(nota: MinhaNotaFiscal): void {
+    if (this.loadingTabela) return;
+    const url = nota.link_api_pdf?.trim();
+    if (url) {
+      window.open(url, '_blank', 'noopener,noreferrer');
+    }
+  }
+
+  visualizarXml(nota: MinhaNotaFiscal): void {
+    if (this.loadingTabela) return;
+    const url = nota.link_api_xml?.trim();
+    if (url) {
+      window.open(url, '_blank', 'noopener,noreferrer');
+    }
   }
 
   excluirNota(nota: MinhaNotaFiscal) {
@@ -266,6 +284,7 @@ export class NotasFiscaisComponent implements OnInit {
       case 2: return 'success';     // Emitida
       case 3: return 'danger';      // Cancelada
       case 4: return 'info';        // Aprovada
+      case 6: return 'info';        // Processamento
       default: return 'secondary';
     }
   }

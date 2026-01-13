@@ -1,5 +1,11 @@
 <!-- src/app/features/admin/user-form/user-form.component.html -->
-<form (ngSubmit)="onSubmit()" class="w-full">
+
+<!-- Loading -->
+<div *ngIf="loading" class="mb-3">
+    <p-progressBar mode="indeterminate" [style]="{ height: '6px' }"></p-progressBar>
+</div>
+
+<form *ngIf="!loading" (ngSubmit)="onSubmit()" class="w-full">
   <!-- Dados Principais -->
   <div class="surface-card p-3 border-round-2xl shadow-1 mb-2">
     <div class="flex align-items-center gap-3 mb-4">
@@ -74,7 +80,7 @@
         </p-inputGroup>
       </div>
 
-      <div class="col-12 sm:col-3 mb-3 flex justify-content-center align-items-center">
+      <div class="col-12 sm:col-3 mb-3 flex justify-content-start align-items-start">
         <p-toggleSwitch id="emite" [(ngModel)]="usuario.emite" name="emite" />
         <label for="emite" class="ml-2 mb-0">Emite nota fiscal?</label>
       </div>
