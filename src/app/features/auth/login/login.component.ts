@@ -81,7 +81,7 @@ export class LoginComponent {
         if (response.role_id === 1) {
           this.router.navigate(['/admin/notas-fiscais']);
         } else {
-          this.router.navigate(['/notas-fiscais']);
+          this.router.navigate(['/resumo']);
         }
       },
       error: (err) => {

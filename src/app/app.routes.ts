@@ -16,14 +16,24 @@ export const routes: Routes = [
       import('./layout/layout.component').then(c => c.LayoutComponent),
     children: [
       {
-        path: 'clientes',
+        path: 'resumo',
         loadComponent: () =>
-          import('./features/clientes/cliente-list/cliente-list.component').then(c => c.ClienteListComponent)
+          import('./features/notas-fiscais/resumo-dashboard-notas-fiscal/resumo-dashboard-notas-fiscal.component').then(c => c.ResumoDashboardNotasFiscalComponent)
       },
       {
         path: 'notas-fiscais',
         loadComponent: () =>
           import('./features/notas-fiscais/notas-fiscais-list/notas-fiscais.component').then(c => c.NotasFiscaisComponent)
+      },
+      {
+        path: 'notas-fiscais/recebidas',
+        loadComponent: () =>
+          import('./features/notas-fiscais/notas-recebidas-list/notas-recebidas-list.component').then(c => c.NotasRecebidasListComponent)
+      },
+      {
+        path: 'clientes',
+        loadComponent: () =>
+          import('./features/clientes/cliente-list/cliente-list.component').then(c => c.ClienteListComponent)
       },
       {
         path: 'admin/usuarios',
@@ -43,7 +53,7 @@ export const routes: Routes = [
           import('./features/user-account/user-account/user-account.component').then(c => c.UserAccountComponent),
         canActivate: [authGuard]
       },
-      { path: '', redirectTo: 'notas-fiscais', pathMatch: 'full' }
+      { path: '', redirectTo: 'resumo', pathMatch: 'full' } // ← Nova página inicial
     ]
   },
   { path: '**', redirectTo: 'login' }

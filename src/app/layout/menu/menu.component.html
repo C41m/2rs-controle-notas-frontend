@@ -23,13 +23,38 @@
       </div>
 
       <div class="menu-items flex flex-column gap-2">
-        <a routerLink="/notas-fiscais" routerLinkActive="active"
+
+        <a routerLink="/resumo" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"
+          class="menu-item p-3 flex align-items-center gap-3 border-round-xl transition-all transition-duration-200 no-underline surface-card shadow-1 hover:shadow-2">
+          <div class="icon-container border-circle p-2 surface-hover flex align-items-center justify-content-center">
+            <i class="pi pi-chart-line text-primary"></i>
+          </div>
+          <div class="flex flex-column">
+            <span class="font-medium text-900">Resumo</span>
+            <span class="text-xs text-500">Visão geral</span>
+          </div>
+          <i class="pi pi-chevron-right text-400 ml-auto"></i>
+        </a>
+
+        <a routerLink="/notas-fiscais" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"
           class="menu-item p-3 flex align-items-center gap-3 border-round-xl transition-all transition-duration-200 no-underline surface-card shadow-1 hover:shadow-2">
           <div class="icon-container border-circle p-2 surface-hover flex align-items-center justify-content-center">
             <i class="pi pi-file text-primary"></i>
           </div>
           <div class="flex flex-column">
-            <span class="font-medium text-900">Notas Fiscais</span>
+            <span class="font-medium text-900">Notas Fiscais Emitidas</span>
+            <span class="text-xs text-500">Gerenciar notas</span>
+          </div>
+          <i class="pi pi-chevron-right text-400 ml-auto"></i>
+        </a>
+
+        <a routerLink="/notas-fiscais/recebidas" routerLinkActive="active"
+          class="menu-item p-3 flex align-items-center gap-3 border-round-xl transition-all transition-duration-200 no-underline surface-card shadow-1 hover:shadow-2">
+          <div class="icon-container border-circle p-2 surface-hover flex align-items-center justify-content-center">
+            <i class="pi pi-download text-primary"></i>
+          </div>
+          <div class="flex flex-column">
+            <span class="font-medium text-900">Notas Fiscais Recebidas</span>
             <span class="text-xs text-500">Gerenciar notas</span>
           </div>
           <i class="pi pi-chevron-right text-400 ml-auto"></i>

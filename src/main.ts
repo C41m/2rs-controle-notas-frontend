@@ -1,11 +1,19 @@
+// src/main.ts
 import { bootstrapApplication } from '@angular/platform-browser';
-import { AppComponent } from './app/app.component';
 import { appConfig } from './app/app.config';
+import { AppComponent } from './app/app.component';
+
+// 👇 Força o locale ANTES de tudo
 import { registerLocaleData } from '@angular/common';
-import localePtBr from '@angular/common/locales/pt';
+import localePt from '@angular/common/locales/pt';
+import { LOCALE_ID } from '@angular/core';
 
-registerLocaleData(localePtBr, 'pt-BR');
+registerLocaleData(localePt);
 
-
-bootstrapApplication(AppComponent, appConfig)
-  .catch(err => console.error(err));
+bootstrapApplication(AppComponent, {
+  ...appConfig,
+  providers: [
+    { provide: LOCALE_ID, useValue: 'pt-BR' },
+    ...(appConfig.providers || [])
+  ]
+}).catch((err) => console.error(err));

@@ -1,0 +1,114 @@
+<!-- src/app/features/notas-fiscais/notas-recebidas-list/notas-recebidas-list.component.html -->
+<p-toast />
+
+
+<div class="flex align-items-center gap-3 mb-4 p-3">
+    <div class="icon-wrapper border-circle p-3 surface-card shadow-1 flex align-items-center justify-content-center">
+        <i class="pi pi-download text-primary text-5xl"></i>
+    </div>
+    <div class="flex flex-column">
+        <h1 class="m-0 text-5xl font-bold text-900">Notas Recebidas</h1>
+        <p class="text-500 mt-1 mb-0">Gerencie sua movimentação de serviços tomados</p>
+    </div>
+</div>
+
+
+
+<!-- Loading -->
+<div *ngIf="loading" class="mb-3">
+    <p-progressBar mode="indeterminate" [style]="{ height: '6px' }"></p-progressBar>
+</div>
+
+
+<div *ngIf="!loading">
+
+    <!-- Tabela -->
+    <div class="surface-card p-4 border-round-2xl shadow-1 fadein animation-duration-500 animation-iteration-count-1">
+        <div class="flex justify-content-between align-items-center mb-4">
+            <p-iconField iconPosition="left">
+                <p-inputIcon>
+                    <i class="pi pi-search"></i>
+                </p-inputIcon>
+                <input pInputText type="text" (input)="onGlobalFilter($event)" placeholder="Pesquisar..."
+                    class="w-20rem border-round-2xl" />
+            </p-iconField>
+            <!-- Filtro por período -->
+            <div class="flex flex-wrap gap-3 align-items-end">
+                <!-- Data Início -->
+                <div class="w-full sm:w-auto">
+                    <label for="dataInicio" class="block font-medium mb-2">Data Início</label>
+                    <p-date-picker id="dataInicio" [(ngModel)]="dataInicio" dateFormat="dd/mm/yy" showIcon="true"
+                        [showButtonBar]="true" [readonlyInput]="true"></p-date-picker>
+                </div>
+
+                <!-- Data Fim -->
+                <div class="w-full sm:w-auto">
+                    <label for="dataFim" class="block font-medium mb-2">Data Fim</label>
+                    <p-date-picker id="dataFim" [(ngModel)]="dataFim" dateFormat="dd/mm/yy" showIcon="true"
+                        [showButtonBar]="true" [readonlyInput]="true"></p-date-picker>
+                </div>
+
+                <!-- Botão -->
+                <div class="w-full sm:w-auto flex align-items-end">
+                    <p-button label="Consultar" icon="pi pi-search" (click)="carregarNotas()" [loading]="loading" />
+                </div>
+            </div>
+        </div>
+
+
+
+        <p-table #dt [value]="notas" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10, 25, 50]"
+            [showCurrentPageReport]="true" currentPageReportTemplate="Exibindo {first} a {last} de {totalRecords}"
+            responsiveLayout="scroll" [globalFilterFields]="['NFSe', 'Nome_Prest', 'CNPJ_Prest', 'Valor', 'Status']"
+            styleClass="p-datatable-sm">
+
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>NFSe</th>
+                    <th>Prestador</th>
+                    <th>CNPJ</th>
+                    <th class="text-right">Valor</th>
+                    <th class="text-center">Emissão</th>
+                    <th class="text-center">Status</th>
+                    <th class="text-center">Ações</th>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-nota>
+                <tr>
+                    <td>{{ nota.NFSe }}</td>
+                    <td class="truncate" style="max-width: 200px;">{{ nota.Nome_Prest }}</td>
+                    <td>{{ nota.CNPJ_Prest }}</td>
+                    <td class="text-right">
+                        {{ parseValor(nota.Valor.replace(',', '.')) | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}
+                    </td>
+                    <td class="text-center">{{ nota.Emissao }}</td>
+                    <td class="text-center">
+                        <p-tag [value]="nota.Status" [severity]="getStatusSeverity(nota.Status)" />
+                    </td>
+                    <td class="text-center">
+                        <div class="flex justify-content-center gap-1">
+                            <p-button *ngIf="nota.eNFSe_PDF" icon="pi pi-file-pdf" [rounded]="true" [text]="true"
+                                severity="success" (click)="visualizarPdf(nota.eNFSe_PDF)" pTooltip="PDF"
+                                tooltipPosition="top" />
+                            <p-button *ngIf="nota.eNFSe_XML" icon="pi pi-file-excel" [rounded]="true" [text]="true"
+                                severity="success" (click)="visualizarXml(nota.eNFSe_XML)" pTooltip="XML"
+                                tooltipPosition="top" />
+                        </div>
+                    </td>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="7" class="text-center py-6">
+                        <div class="flex flex-column align-items-center gap-3">
+                            <i class="pi pi-inbox text-400 text-6xl"></i>
+                            <span class="text-500 text-lg">Nenhuma nota recebida encontrada.</span>
+                        </div>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>

@@ -95,6 +95,42 @@ export interface NotaFiscalAdmin extends MinhaNotaFiscal {
   };
 }
 
+export interface NotaRecebida {
+  ID: string;
+  CN: string;
+  Action: string | null;
+  NFSe: string;
+  RPS: string;
+  Nome_Tom: string;
+  CNPJ_Tom: string;
+  Nome_Prest: string;
+  CNPJ_Prest: string;
+  Valor: string; // vem como "330,00"
+  Emissao: string; // "dd/mm/yyyy"
+  Status: string;
+  eNFSe_PDF: string;
+  eNFSe_XML: string;
+  CodVer: string;
+  IM: string;
+  CodServ: string;
+  Aliquota: string;
+  PIS: string;
+  COFINS: string;
+  INSS: string;
+  IRRF: string;
+  CSLL: string;
+  IBS: string | null;
+  CBS: string | null;
+  Outras_Ret: string | null;
+  Descr: string;
+  TributacaoRPS: string;
+  Notes: string;
+  Email: string;
+  TipoDoc: string;
+  IssRetido: string | null;
+  ExternalAPIStatus: string | null;
+}
+
 
 // Tipo base com campos mínimos para visualização
 
@@ -145,6 +181,10 @@ export class NotaFiscalService {
 
   buscarPorId(id: number): Observable<MinhaNotaFiscal> {
     return this.http.get<MinhaNotaFiscal>(`${this.apiUrl}/${id}`);
+  }
+
+  consultarNotasRecebidas(periodo: any): Observable<NotaRecebida[]> {
+    return this.http.post<NotaRecebida[]>(`${this.apiUrl}/recebidas`, periodo);
   }
 
 }
